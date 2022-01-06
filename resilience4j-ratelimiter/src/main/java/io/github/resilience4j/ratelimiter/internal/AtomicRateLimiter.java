@@ -248,10 +248,12 @@ public class AtomicRateLimiter implements RateLimiter {
             nextPermissions = (int) min(nextPermissions + accumulatedPermissions,
                 permissionsPerCycle);
         }
+        // 根据申请的许可证的数据去判定需要等待的时长
         long nextNanosToWait = nanosToWaitForPermission(
             permits, cyclePeriodInNanos, permissionsPerCycle, nextPermissions, currentNanos,
             currentCycle
         );
+        // 预留许可证信息，并生成新的state信息
         return reservePermissions(activeState.config, permits, timeoutInNanos, nextCycle,
             nextPermissions, nextNanosToWait);
     }
